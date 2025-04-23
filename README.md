@@ -1,4 +1,4 @@
-# METS2EXIF – Automatische Metadaten-Extraktion und Einbettung
+# METS2EXIF – Automatische METS-Metadaten-Extraktion und Einbettung in die Bild-Datei
 
 Dieses Python-Skript lädt METS-Dateien, extrahiert relevante Metadaten und fügt sie mithilfe von ExifTool in heruntergeladene Bilder ein.
 Im Skript wird das Angebot der Digitalen Sammlungen der Staatsbibliothek zu Berlin genutzt.
