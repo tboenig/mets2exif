@@ -1,12 +1,16 @@
-[
-  {"element": ".//dv:owner", "metadata": "XMP:Contributor"},
-  {"element": ".//mets:dmdSec[1]//mods:mods/mods:titleInfo/mods:title", "metadata": "XMP:Title"},
-  {"element": ".//mods:name/mods:displayForm", "metadata": "XMP:Creator"},
-  {"element": ".//mods:originInfo[@eventType='publication']/mods:publisher", "metadata": "XMP:Publisher"},
-  {"element": ".//mods:accessCondition", "metadata": "XMP:Copyright"},
-  {"element": ".//mods:classification", "metadata": "XMP:Subject"},
-  {"element": ".//mods:identifier[@type='doi']", "metadata": "XMP:Identifier"},
-  {"element": ".//mods:relatedItem[@type='original']/mods:recordInfo/mods:recordIdentifier", "metadata": "XMP:Relation"},
-  {"element": ".//mods:language/mods:languageTerm", "metadata": "XMP:Language"},
-  {"element": ".//mods:accessCondition[@type='use and reproduction']", "attribut": "xlink:href", "metadata": "XMP-cc:License"}
-]
+{
+    "mets_url": "https://content.staatsbibliothek-berlin.de/dc/{ppn}.mets.xml",
+    "image_url": "https://content.staatsbibliothek-berlin.de/dms/{ppn}/8000/0/{seite}.tif?original=true",
+    "metadata_config": [
+    {"element": ".//dv:owner", "metadata": "XMP:Contributor"},
+    {"element": ".//mets:dmdSec[1]//mods:mods/mods:titleInfo/mods:title", "metadata": "XMP:Title"},
+    {"element": ".//mods:name/mods:displayForm", "metadata": "XMP:Creator"},
+    {"element": ".//mods:originInfo[@eventType='publication']/mods:publisher", "metadata": "XMP:Publisher"},
+    {"element": ".//mods:accessCondition", "metadata": "XMP:Copyright"},
+    {"element": ".//mods:classification", "metadata": "XMP:Subject"},
+    {"element": ".//mods:identifier[@type='doi']", "metadata": "XMP:Identifier"},
+    {"element": ".//mods:relatedItem[@type='original']/mods:recordInfo/mods:recordIdentifier", "metadata": "XMP:Relation"},
+    {"element": ".//mods:language/mods:languageTerm", "metadata": "XMP:Language"},
+    {"element": ".//mods:accessCondition[@type='use and reproduction']", "attribut": "xlink:href", "metadata": "XMP-cc:License"}
+  ]
+  }

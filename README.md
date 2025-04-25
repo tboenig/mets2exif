@@ -4,9 +4,9 @@ Dieses Python-Skript lädt METS-Dateien, extrahiert relevante Metadaten und füg
 Im Skript wird das Angebot der Digitalen Sammlungen der Staatsbibliothek zu Berlin genutzt.
 
 ## 📜 Funktionen
-- **Lädt METS-Dateien** von der Staatsbibliothek Berlin mit Nutzung der PPN.
+- **Lädt die METS-Datei** vom digitalisierten Bestand mit Nutzung der PPN.
 - **Extrahiert relevante Metadaten** basierend auf einer JSON-Konfiguration.
-- **Lädt Bilder** von der Staatsbibliothek Berlin mit Nutzung der PPN.
+- **Lädt Bilder** vom digitalisierten Bestand mit Nutzung der PPN.
 - **Setzt EXIF/XMP-Metadaten** mithilfe von `ExifTool`.
 
 ## 🔧 Voraussetzungen
@@ -33,13 +33,51 @@ Im Skript wird das Angebot der Digitalen Sammlungen der Staatsbibliothek zu Berl
      Lade ExifTool von [Phil Harvey's Webseite](https://exiftool.org/) herunter und füge es dem PATH hinzu.
 
 ## 📄 Konfiguration (`config.json`)
-Die Metadaten werden über eine JSON-Datei gesteuert. Beispiel:
+Die Nutzung der Metadaten und der Download der TIFF-Bild-Dateien werden über eine JSON-Datei gesteuert. 
+
+Beispiel aus dem Bestand der Digitalen Sammlungen der Staatsbibliothek zu Berlin:
 
 ```json
-[
-    {"element": ".//mods:language/mods:languageTerm", "metadata": "XMP:Language"},
-    {"element": ".//mods:accessCondition[@type='use and reproduction']", "attribut": "xlink:href", "metadata": "XMP-cc:License"}
+{
+  "mets_url": "https://content.staatsbibliothek-berlin.de/dc/{ppn}.mets.xml",
+  "image_url": "https://content.staatsbibliothek-berlin.de/dms/{ppn}/8000/0/{seite}.tif?original=true",
+  "metadata_config": [
+  {"element": ".//dv:owner", "metadata": "XMP:Contributor"},
+  {"element": ".//mets:dmdSec[1]//mods:mods/mods:titleInfo/mods:title", "metadata": "XMP:Title"},
+  {"element": ".//mods:name/mods:displayForm", "metadata": "XMP:Creator"},
+  {"element": ".//mods:originInfo[@eventType='publication']/mods:publisher", "metadata": "XMP:Publisher"},
+  {"element": ".//mods:accessCondition", "metadata": "XMP:Copyright"},
+  {"element": ".//mods:classification", "metadata": "XMP:Subject"},
+  {"element": ".//mods:identifier[@type='doi']", "metadata": "XMP:Identifier"},
+  {"element": ".//mods:relatedItem[@type='original']/mods:recordInfo/mods:recordIdentifier", "metadata": "XMP:Relation"},
+  {"element": ".//mods:language/mods:languageTerm", "metadata": "XMP:Language"},
+  {"element": ".//mods:accessCondition[@type='use and reproduction']", "attribut": "xlink:href", "metadata": "XMP-cc:License"}
 ]
+}
+```
+Möchten Sie den Bestand einer anderen Digitalen Sammlung nutzen?
+1. Analysieren Sie die Metadaten.
+2. Ermitteln Sie den Zugang zur Metadatendatei.
+3. Ermitteln Sie den Zugang zu den Bilddateien.
+4. Passen Sie die config JSON-Datei an.
+
+Beispiel aus dem Bestand der Digitalen Sammlungen der Niedersächsische Staats- und Universitätsbibliothek Göttingen:
+
+```json
+{
+  "mets_url": "https://gdz.sub.uni-goettingen.de/mets/PPN{ppn}.mets.xml",
+  "image_url": "http://gdz.sub.uni-goettingen.de/tiff/PPN{ppn}/{seite}.tif",
+  "metadata_config": [
+  {"element": ".//dv:owner", "metadata": "XMP:Contributor"},
+  {"element": ".//mets:dmdSec[1]//mods:mods/mods:titleInfo/mods:title", "metadata": "XMP:Title"},
+  {"element": ".//mods:role[mods:roleTerm[text()='aut']]/following-sibling::mods:namePart", "metadata": "XMP:Creator"},
+  {"element": ".//mods:publisher", "metadata": "XMP:Publisher"},
+  {"element": ".//mods:classification", "metadata": "XMP:Subject"},
+  {"element": ".//mods:identifier[@type='gbv-ppn']", "metadata": "XMP:Identifier"},
+  {"element": ".//mods:identifier[@type='PPNanalog']", "metadata": "XMP:Relation"},
+  {"element": ".//mets:dmdSec[1]//mods:language/mods:languageTerm", "metadata": "XMP:Language"}
+]
+}
 ```
 
 ## 📄 Nutzung der Exif:Tags
