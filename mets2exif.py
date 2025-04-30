@@ -101,25 +101,41 @@ def extract_metadata(mets_file):
         print(f"Fehler beim Extrahieren der Metadaten: {e}")
         return {}
 
-def apply_exif_metadata(images, metadata):
-    """Fügt Metadaten mit ExifTool in die Bilddateien ein."""
+def apply_exif_metadata(images, metadata, config=None):
+    """Fügt Metadaten mit ExifTool in einem einzigen Befehl in die Bilddateien ein."""
     for image, url in images:
+        cmd = ["exiftool"]
+
+        # Falls eine Konfigurationsdatei angegeben ist
+        if config:
+            cmd.append(f"-config .{config}")
+
+        # Alle Metadaten in einem einzigen Aufruf hinzufügen
         for tag, value in metadata.items():
-            subprocess.run(["exiftool", f"-{tag}={value}", image], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        subprocess.run(["exiftool", f"-XMP-dc:Source={url}", image], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(f"Metadaten erfolgreich in {image} eingefügt.")
+            cmd.append(f'-{tag}="{value}"')
+
+        # Datei hinzufügen
+        cmd.append(image)
+
+        # ExifTool ausführen
+        #print(f'Executing: {" ".join(cmd)}')
+        subprocess.run(" ".join(cmd), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+        print(f"Metadaten erfolgreich in {image} eingefügt.")            
 
 def main():
     """Hauptprogramm: Nutzerabfragen und Verarbeitung."""
     ppn = input("Geben Sie die PPN ein: ")
     startbild = int(input("Startbildnummer eingeben: "))
     endbild = int(input("Endbildnummer eingeben: "))
+    config_file = input("Geben Sie optional die Konfigurationsdatei für ExifTool ein (oder drücken Sie Enter für keine): ")
 
     mets_file = download_mets(ppn)
     if mets_file:
         metadata = extract_metadata(mets_file)
         images = download_images(ppn, startbild, endbild)
-        apply_exif_metadata(images, metadata)
+        apply_exif_metadata(images, metadata, config_file if config_file else None)
         print("Metadaten erfolgreich hinzugefügt.")
 
 if __name__ == "__main__":

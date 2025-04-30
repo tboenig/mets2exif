@@ -1,0 +1,17 @@
+%Image::ExifTool::UserDefined = (
+    'Image::ExifTool::XMP::Main' => {
+        LibRML => {
+            SubDirectory => { TagTable => 'Image::ExifTool::UserDefined::LibRML' },
+        },
+    },
+);
+
+%Image::ExifTool::UserDefined::LibRML = (
+    GROUPS => { 0 => 'XMP', 1 => 'XMP-LibRML', 2 => 'Image' },
+    NAMESPACE => { 'LibRML' => 'https://librml.org/LibRML/0.0.1/' },
+    WRITABLE => 'string',
+    AttributionURL => { Writable => 'string' },
+);
+
+require Image::ExifTool::XMP;
+Image::ExifTool::XMP::RegisterNamespace(\%Image::ExifTool::UserDefined::LibRML);

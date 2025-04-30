@@ -7,6 +7,7 @@ Im Skript wird das Angebot der Digitalen Sammlungen der Staatsbibliothek zu Berl
 - **Lädt die METS-Datei** vom digitalisierten Bestand mit Nutzung der PPN.
 - **Extrahiert relevante Metadaten** basierend auf einer JSON-Konfiguration.
 - **Lädt Bilder** vom digitalisierten Bestand mit Nutzung der PPN.
+- **Lädt XMP-Tag Erweiterung** optional
 - **Setzt EXIF/XMP-Metadaten** mithilfe von `ExifTool`.
 
 ## 🔧 Voraussetzungen
@@ -85,6 +86,66 @@ Die Metadaten werden in Form von Exif:Tags angegeben. In den meisten Fällen sin
 Siehe dazu: https://exiftool.org/TagNames/XMP.html
 
 
+## 📄 Nutzung der Exif:Tags Erweiterung
+
+Mit der **.ExifTool_config**-Datei kann eine Erweiterung von Exif-Tags vorgenommen werden, um die Dokumentation von Rechten oder Lizenzen zu ermöglichen.
+
+Diese Konfiguration definiert vorerst nur einen Tag, der mit **LibRML** korrespondiert und zur Speicherung von Lizenzinformationen dient.
+
+### 🛠 Konfigurationsdatei
+
+Die folgende Perl-Konfiguration ermöglicht die Nutzung des benutzerdefinierten XMP-Namespace [**LibRML**](https://librml.org):
+
+Informationen zur Exiftool-Tag-Konfigurationsdatei siehe: https://exiftool.org/config.html
+```perl
+%Image::ExifTool::UserDefined = (
+    'Image::ExifTool::XMP::Main' => {
+        LibRML => {
+            SubDirectory => { TagTable => 'Image::ExifTool::UserDefined::LibRML' },
+        },
+    },
+);
+
+%Image::ExifTool::UserDefined::LibRML = (
+    GROUPS => { 0 => 'XMP', 1 => 'XMP-LibRML', 2 => 'Image' },
+    NAMESPACE => { 'LibRML' => 'https://librml.org/LibRML/0.0.1/' },
+    WRITABLE => 'string',
+    AttributionURL => { Writable => 'string' },
+);
+
+require Image::ExifTool::XMP;
+Image::ExifTool::XMP::RegisterNamespace(\%Image::ExifTool::UserDefined::LibRML);
+```
+
+### 📌 Hinweise zur Nutzung
+
+1. **Einbindung in ExifTool:**  
+   Die `.ExifTool_config`-Datei muss im ExifTool-Verzeichnis hinterlegt werden, damit die Erweiterung erkannt und verarbeitet wird.
+
+2. **Tag-Nutzung:**  
+   Der Tag `LibRML:AttributionURL` kann verwendet werden, um eine URL zur Attributionsdokumentation innerhalb der Metadaten zu speichern.
+
+    Beispiel Konfiguration der **config.json**
+
+    ```json
+
+    {
+        "mets_url": "https://content.staatsbibliothek-berlin.de/dc/{ppn}.mets.xml",
+        "image_url": "https://content.staatsbibliothek-berlin.de/dms/{ppn}/8000/0/{seite}.tif?original=true",
+        "metadata_config": [
+        {"element": ".//mods:accessCondition[@type='use and reproduction']", "attribut": "xlink:href", "metadata": "XMP-LibRML:AttributionURL"},
+    }
+    ```    
+
+
+3. **Kompatibilität:**  
+   Diese Erweiterung nutzt das XMP-Format, wodurch eine breite Unterstützung in Bildbearbeitungssoftware und Archivierungssystemen gewährleistet wird.
+
+---
+
+Falls du noch Änderungen oder Ergänzungen möchtest, sag einfach Bescheid! 😊
+
+
 ## ⚙️ Nutzung
 1. **Starte das Skript** und gib die PPN (Pica Production Number) sowie die Bildnummern, die bearbeitet werden sollen an:
    ```bash
@@ -92,9 +153,10 @@ Siehe dazu: https://exiftool.org/TagNames/XMP.html
    ```
    **Beispiel Eingabe**
    ```
-   Geben Sie die PPN ein: 192083222X
-   Startbildnummer eingeben: 1
-   Endbildnummer eingeben: 2
+   Geben Sie die PPN ein: 1872312616
+   Startbildnummer eingeben: 6
+   Endbildnummer eingeben: 7
+   Geben Sie optional die Konfigurationsdatei für ExifTool ein (oder drücken Sie Enter für keine): ExifTool_config
    ```
 
 2. **Das Skript lädt Metadaten und Bilder** und bettet sie mit ExifTool ein.
