@@ -183,9 +183,3 @@ Falls du das Projekt erweitern willst:
 
 ## 🏆 Lizenz
 Dieses Projekt steht unter der CC-Lizenz – feel free to use and contribute!
-
----
-🚀 Viel Erfolg mit der Metadaten-Extraktion!
-```
-
-Falls du noch Anpassungen möchtest, lass es mich wissen! 🚀
