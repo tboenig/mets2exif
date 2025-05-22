@@ -188,11 +188,4 @@ Dieses Projekt steht unter der CC-Lizenz – feel free to use and contribute!
 🚀 Viel Erfolg mit der Metadaten-Extraktion!
 ```
 
-### **Was wurde hinzugefügt?**
-✅ **Beschreibung des Projekts**  
-✅ **Installation & Setup für Python und ExifTool**  
-✅ **Konfigurationsdetails für `config.json`**  
-✅ **Schritt-für-Schritt Nutzung und Fehlerbehebung**  
-✅ **Weiterentwicklungsmöglichkeiten**  
-
 Falls du noch Anpassungen möchtest, lass es mich wissen! 🚀
